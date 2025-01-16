@@ -1,3 +1,6 @@
 [submodule "GAN-flow"]
 	path = GAN-flow
 	url = https://github.com/jonpappalord/GAN-flow.git
+[submodule "GECCO2024-graph-evolution"]
+	path = GECCO2024-graph-evolution
+	url = https://github.com/sydleither/GECCO2024-graph-evolution.git
