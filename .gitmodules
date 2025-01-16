@@ -4,3 +4,6 @@
 [submodule "GECCO2024-graph-evolution"]
 	path = GECCO2024-graph-evolution
 	url = https://github.com/sydleither/GECCO2024-graph-evolution.git
+[submodule "graph-evolution"]
+	path = graph-evolution
+	url = https://github.com/sydleither/graph-evolution.git
