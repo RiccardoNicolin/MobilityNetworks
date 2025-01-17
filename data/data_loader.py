@@ -13,7 +13,7 @@ def load_npy_files_from_directory(directory_path):
     return npy_files
 
 def get_max_in_population(population):
-    max_value = float('-inf')
+    max_value = 0.0
     for npy_array in population:
         max_value = max(max_value, np.max(npy_array))
     return max_value
@@ -21,7 +21,6 @@ def get_max_in_population(population):
 def normalize_population(population):
     max_value = np.float64(get_max_in_population(population))
 
-    
     for npy_array in population:
         npy_array /= (max_value)
     
