@@ -34,20 +34,20 @@ def array_to_greyscale_image(array: np.ndarray, output_path: str):
 
 if __name__ == "__main__":
     
-    # with open('data/sample/0/final_pop.pkl', 'rb') as file:
-    #     obj_list = pickle.load(file)
+    with open('data/sample/0/final_pop.pkl', 'rb') as file:
+        obj_list = pickle.load(file)
 
-    # for i,oranism in enumerate(obj_list[:5]):
-    #     # oranism.saveGraphFigure(f'data/sample/0/organismo_{i}.png')
-    #     array_to_greyscale_image(oranism.adjacencyMatrix, f'data/sample/0/organismo_{i}.png')
+    for i,oranism in enumerate(obj_list[:5]):
+        # oranism.saveGraphFigure(f'data/sample/0/organismo_{i}.png')
+        array_to_greyscale_image(oranism.adjacencyMatrix, f'data/sample/0/organismo_{i}.png')
     # print(obj_list)
 
-    npy_obj = np.load("GAN-flow/adj/BikeCHI/2018-01-01.npy")
-    npy_obj = npy_obj.astype(np.float64)
-    npy_obj /= 327.0
+    # npy_obj = np.load("GAN-flow/adj/BikeCHI/2018-01-01.npy")
+    # npy_obj = npy_obj.astype(np.float64)
+    # npy_obj /= 327.0
 
-    array_to_greyscale_image(npy_obj, "test/original.png")
+    # array_to_greyscale_image(npy_obj, "test/original.png")
 
-    org = Organism(64, uniform(0, np.max(npy_obj)), [0, 327], npy_obj)
+    # org = Organism(64, uniform(0, np.max(npy_obj)), [0, 327], npy_obj)
     
-    array_to_greyscale_image(org.adjacencyMatrix, "test/rescaled.png")
+    # array_to_greyscale_image(org.adjacencyMatrix, "test/rescaled.png")
