@@ -3,9 +3,9 @@ import json
 import os, sys
 
 from collections import Counter
-from random import random, seed
+from random import random, seed, uniform
 from numpy import mean 
-
+import numpy as np
 sys.path.append("graph_evolution")
 
 from nsga import nsga_tournament
@@ -61,7 +61,8 @@ def run(config):
             population = []
             inserted = 0
             while genomes_available > 0 and inserted < popsize:
-                population.append(Organism(network_size, random(), weight_range, genome=initial_population[genomes_available-1]))
+
+                population.append(Organism(network_size, uniform(0, np.max(initial_population[genomes_available-1])), weight_range, genome=initial_population[genomes_available-1]))
                 inserted += 1
                 genomes_available -= 1
 
