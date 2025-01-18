@@ -52,7 +52,10 @@ def run(config):
                         parents[i+popsize], crossover_rate, crossover_odds, gen).makeMutatedCopy(
                         mutation_rate, mutation_odds) for i in range(popsize)]
             for name, target in objectives.items():
-                _ = [org.getError(name, target) for org in children]
+                if isinstance(target,dict):
+                    _ = [org.getError(name, target["target"], target["range"]) for org in children]
+                else:
+                    _ = [org.getError(name, target) for org in children]
             age_layers.append(children)
 
         #initialize / reset layer 0
@@ -70,7 +73,10 @@ def run(config):
                 raise ValueError("Not enough genomes available to fill population")
 
             for name, target in objectives.items():
-                _ = [org.getError(name, target) for org in population]
+                if isinstance(target,dict):
+                    _ = [org.getError(name, target["target"], target["range"]) for org in population]
+                else:
+                    _ = [org.getError(name, target) for org in population]
             F = fast_non_dominated_sort(population)
             _ = [nsga_distance_assignment(F[f]) for f in F]
             age_layers[0] = population
@@ -93,7 +99,10 @@ def run(config):
                         parents[i+popsize], crossover_rate, crossover_odds, gen).makeMutatedCopy(
                         mutation_rate, mutation_odds) for i in range(popsize)]
             for name, target in objectives.items():
-                _ = [org.getError(name, target) for org in children]
+                if isinstance(target,dict):
+                    _ = [org.getError(name, target["target"], target["range"]) for org in children]
+                else:
+                    _ = [org.getError(name, target) for org in children]
 
             #move organisms that have aged out to next layer
             layer_candidates = layer_l + children
@@ -108,7 +117,10 @@ def run(config):
             if len(R) < popsize:
                 padding = [Organism(network_size, random(), weight_range) for _ in range(popsize-len(R))]
                 for name, target in objectives.items():
-                    _ = [org.getError(name, target) for org in padding]
+                    if isinstance(target,dict):
+                        _ = [org.getError(name, target["target"], target["range"]) for org in padding]
+                    else:
+                        _ = [org.getError(name, target) for org in padding]
                 R.extend(padding)
             F = fast_non_dominated_sort(R)
             if len(R) == popsize:
