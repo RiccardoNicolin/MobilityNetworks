@@ -92,8 +92,6 @@ def get_weights_metric(obj_list):
     std = np.std(all_weights)
     return mean, std
 
-    
-
 if __name__ == "__main__":
 
     with open('data/preprocessed/normalized_population_BikeCHI.pkl', 'rb') as file:

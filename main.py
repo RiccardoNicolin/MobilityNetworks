@@ -8,6 +8,8 @@ from numpy import mean
 import numpy as np
 sys.path.append("graph_evolution")
 
+from graph_evolution.main import plot_line, plotParetoFront
+from graph_evolution.plot_utils import final_pop_distribution, final_pop_histogram
 from nsga import nsga_tournament
 from organism import Organism
 from nsga import fast_non_dominated_sort, nsga_distance_assignment
@@ -167,6 +169,16 @@ def run_rep(i, save_loc, config):
     if config["save_data"] == 1:
         with open("{}/final_pop.pkl".format(save_loc_i), "wb") as f:
             pickle.dump(final_pop, f)
+
+    if config["plot_data"] == 1:
+        tracking_frequency = config["tracking_frequency"]
+        generations = [x*tracking_frequency for x in range((config["num_generations"]//tracking_frequency)+1)]
+        if len(perfect_pop) > 0:
+            final_pop_histogram(perfect_pop, objectives, save_loc_i, plot_all=True)
+            final_pop_distribution(perfect_pop, objectives, save_loc_i, plot_all=True, with_error=True)
+        plot_line(fitness_log, generations, "Error", "fitness", save_loc_i, logscale=True)
+        plot_line(diversity_log, generations, "Count of Unique Types", "unique_types", save_loc_i)
+        plotParetoFront(final_pop, config, save_loc_i, first_front_only=False)
 
 def main(config):
     save_loc = "{}/{}".format(config["data_dir"], config["name"])
