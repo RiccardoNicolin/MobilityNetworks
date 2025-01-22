@@ -8,7 +8,7 @@ import evaluation
 
 import networkx as nx
 from tqdm import tqdm
-from cutnorm.cutnorm import compute_cutnorm
+from cutnorm import compute_cutnorm
 #import warnings
 #warnings.filterwarnings("ignore")
 
@@ -57,7 +57,7 @@ def get_exp_measures(lista, paired = False, method = "cutnorm"):
     if paired:
         insieme = lista
     else:
-        insieme = [itertools.combinations(lista, r =2)]
+        insieme = itertools.combinations(lista, r=2)
 
     if method == "topo":
             exp = []
