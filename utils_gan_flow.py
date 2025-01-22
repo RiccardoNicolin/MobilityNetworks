@@ -2,11 +2,10 @@ import numpy as np
 import pandas as pd
 import itertools
 from scipy.spatial import distance
-
 # from cutnorm import compute_cutnorm
 import evaluation
-
 import networkx as nx
+import matplotlib.pyplot as plt
 from tqdm import tqdm
 from cutnorm import compute_cutnorm
 #import warnings
@@ -14,6 +13,41 @@ from cutnorm import compute_cutnorm
 
 import random
 random.seed(3110)
+
+def plot_distributions(distributions: list,
+                       labels: list,
+                       title: str,
+                       x_label: str,
+                       y_label: str,
+                       output_path: str):
+    """
+    Plot the given distributions with the specified labels and title.
+    The plot is saved to the specified output path.
+
+    :param distributions: The distributions to plot
+    :param labels: The labels for the distributions
+    :param title: The title of the plot
+    :param x_label: The label for the x-axis
+    :param y_label: The label for the y-axis
+    :param output_path: The path to save the plot
+    """
+    # Create a new figure
+    plt.figure(figsize=(10, 6))
+
+    # Plot the distributions as histograms
+    for distribution, label in zip(distributions, labels):
+        plt.hist(distribution, bins=30, alpha=0.5, label=label, density=True)
+
+    # Add a legend
+    plt.legend()
+
+    # Add a title and labels
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+    # Save the plot to the specified output path
+    plt.savefig(output_path)
 
 def get_rmse(x, y):
     return np.sqrt(np.mean(np.subtract(x,y) ** 2))

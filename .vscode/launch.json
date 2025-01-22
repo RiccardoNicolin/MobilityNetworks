@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python Debugger: analysis.py with path",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/analysis.py",
+            "args": ["data/deg_only"],
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python Debugger: main.py with config",
             "type": "debugpy",
             "request": "launch",

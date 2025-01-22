@@ -49,7 +49,6 @@ def get_degree_metric(obj_list):
     distrubutions = []
     max_degree = 0
     for i,adj in enumerate(obj_list):
-
         graph = nx.DiGraph(np.array(adj))
         num_nodes = graph.number_of_nodes()
         degree_sequence = list(d for _, d in graph.degree())
