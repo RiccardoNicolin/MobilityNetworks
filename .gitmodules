@@ -1,6 +1,6 @@
+[submodule "graph_evolution"]
+	path = graph_evolution
+	url = https://github.com/sydleither/graph-evolution
 [submodule "GAN-flow"]
 	path = GAN-flow
 	url = https://github.com/jonpappalord/GAN-flow.git
-[submodule "graph_evolution"]
-	path = graph_evolution
-	url = https://github.com/sydleither/graph-evolution.git

@@ -8,13 +8,12 @@ import evaluation
 
 import networkx as nx
 from tqdm import tqdm
-
+from cutnorm.cutnorm import compute_cutnorm
 #import warnings
 #warnings.filterwarnings("ignore")
 
 import random
 random.seed(3110)
-
 
 def get_rmse(x, y):
     return np.sqrt(np.mean(np.subtract(x,y) ** 2))
@@ -58,15 +57,7 @@ def get_exp_measures(lista, paired = False, method = "cutnorm"):
     if paired:
         insieme = lista
     else:
-        insieme = itertools.combinations(lista, r =2)
-
-    # if method =="cutnorm":
-    #     k = 0
-    #     for pair in tqdm(insieme):
-    #             _, cutn_sdp, _ = compute_cutnorm(pair[0], pair[1])
-    #             exp.append(cutn_sdp)
-    #             k+=1
-    #     return exp
+        insieme = [itertools.combinations(lista, r =2)]
 
     if method == "topo":
             exp = []
@@ -81,7 +72,6 @@ def get_exp_measures(lista, paired = False, method = "cutnorm"):
                 nrmse = rmse/(max(np.max(cl1),np.max(cl2)) - min(np.min(cl1), np.min(cl2)))
                 exp.append(nrmse)
             return exp
-
     elif method == "degree":
             exp = []
 
@@ -94,9 +84,6 @@ def get_exp_measures(lista, paired = False, method = "cutnorm"):
                 nrmse = rmse/(max(np.max(deg1),np.max(deg2)) - min(np.min(deg1), np.min(deg2)))
                 exp.append(nrmse)
             return exp
-
-
-
     elif method == "indegree":
             exp = []
 
@@ -109,8 +96,6 @@ def get_exp_measures(lista, paired = False, method = "cutnorm"):
                 nrmse = rmse/(max(np.max(deg1),np.max(deg2)) - min(np.min(deg1), np.min(deg2)))
                 exp.append(nrmse)
             return exp
-
-
     elif method == "outdegree":
             exp = []
 
@@ -123,30 +108,38 @@ def get_exp_measures(lista, paired = False, method = "cutnorm"):
                 nrmse = rmse/(max(np.max(deg1),np.max(deg2)) - min(np.min(deg1), np.min(deg2)))
                 exp.append(nrmse)
             return exp
+    elif method == "cpc":
+        misura =  evaluation.common_part_of_commuters
+        exp=[]
 
+        for pair in tqdm(insieme):
+            weights_1 = np.array(pair[0]).flatten()
+            weights_2 = np.array(pair[1]).flatten()
+            m = misura(weights_1, weights_2)
+            exp.append(m)
+        return exp
+
+    elif method == "rmse":
+        misura = get_rmse
+        exp=[]
+        for pair in tqdm(insieme):
+            weights_1 = (pair[0]).flatten()
+            weights_2 = (pair[1]).flatten()
+            rmse = misura(weights_1, weights_2)
+            nrmse = rmse/(max(np.max(weights_1),np.max(weights_2)) - min(np.min(weights_1), np.min(weights_2)))
+            exp.append(nrmse)
+        return exp
+    elif method == "cutnorm":
+        k = 0
+        for pair in tqdm(insieme):
+                _, cutn_sdp, _ = compute_cutnorm(pair[0], pair[1])
+                exp.append(cutn_sdp)
+                k+=1
+        return exp
 
 
     else:
-        if method == "cpc":
-            misura =  evaluation.common_part_of_commuters
-            exp=[]
-            for pair in insieme:
-                weights_1 = np.array(pair[0]).flatten()
-                weights_2 = np.array(pair[1]).flatten()
-                m = misura(weights_1, weights_2)
-                exp.append(m)
-            return exp
-
-        elif method == "rmse":
-            misura = get_rmse
-            exp=[]
-            for pair in insieme:
-                weights_1 = (pair[0]).flatten()
-                weights_2 = (pair[1]).flatten()
-                rmse = misura(weights_1, weights_2)
-                nrmse = rmse/(max(np.max(weights_1),np.max(weights_2)) - min(np.min(weights_1), np.min(weights_2)))
-                exp.append(nrmse)
-            return exp
+        raise ValueError("Invalid method '{}'".format(method))
 
 
 if __name__ == "__main__":
