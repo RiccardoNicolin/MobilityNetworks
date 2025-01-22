@@ -74,6 +74,7 @@ def compute_metrics(metric_names, population, dataset, run_name):
 
         plot_metrics(test_metric,fake_metric,mixed_metric, mogan_metric, metric_name, dataset)
 
+
 def plot_metrics(test_metric,fake_metric,mixed_metric, mogan_metric, metric_name, dataset):
     import matplotlib.pyplot as plt
     plt.figure(figsize=(8,6))
@@ -109,14 +110,14 @@ if __name__ == "__main__":
     with open(f'data/sample/0/final_pop.pkl', 'rb') as file:
         obj_list = pickle.load(file)
     
-    # metrics_name= ['cpc']#['indegree', 'degree', 'topo', 'weight']
+    metrics_name= ['cutnorm']#['indegree', 'degree', 'topo', 'weight', 'cpc']
     
-    # compute_metrics(metrics_name, obj_list, 'BikeCHI', run_name)
+    compute_metrics(metrics_name, obj_list, 'BikeCHI', run_name)
 
 
-    # for i,oranism in enumerate(obj_list[:5]):
-    #     # oranism.saveGraphFigure(f'data/sample/0/organismo_{i}.png')
-    #     array_to_greyscale_image(oranism.adjacencyMatrix, f'data/sample/0/organismo_{i}.png')
+    # for i,organism in enumerate(obj_list[:5]):
+    #     # organism.saveGraphFigure(f'data/sample/0/organismo_{i}.png')
+    #     array_to_greyscale_image(organism.adjacencyMatrix, f'data/sample/0/organismo_{i}.png')
 
 
     # print(obj_list)
@@ -124,21 +125,16 @@ if __name__ == "__main__":
 
     # Example usage
     npy_files = get_all_npy_files("GAN-flow/adj/BikeCHI")
-    for i,npy_file in enumerate(npy_files[:10]):
 
+    for i, npy_file in enumerate(npy_files[:10]):
         npy_obj = np.load(npy_file)
-
         npy_obj = npy_obj.astype(np.float64)
-
         print("npy sum", np.sum(npy_obj))
         npy_obj /= 327.0
 
         array_to_greyscale_image(npy_obj, f"test/original{i}.png")
-
         org = Organism(64, uniform(0, np.max(npy_obj)**3), [0, 327], npy_obj)
-
         print("org sum", np.sum(org.adjacencyMatrix))
-        
         array_to_greyscale_image(org.adjacencyMatrix, f"test/rescaled{i}.png")
 
         diff = np.abs(npy_obj - np.array(org.adjacencyMatrix)/327)

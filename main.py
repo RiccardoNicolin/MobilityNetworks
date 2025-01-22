@@ -8,12 +8,10 @@ from numpy import mean
 import numpy as np
 sys.path.append("graph_evolution")
 
+from graph_evolution.organism import Organism
 from graph_evolution.main import plot_line, plotParetoFront
-from graph_evolution.plot_utils import final_pop_distribution, final_pop_histogram
-from nsga import nsga_tournament
-from organism import Organism
-from nsga import fast_non_dominated_sort, nsga_distance_assignment
-from plot_utils import get_perfect_pop
+from graph_evolution.nsga import fast_non_dominated_sort, nsga_distance_assignment, nsga_tournament
+from graph_evolution.plot_utils import final_pop_distribution, final_pop_histogram, get_perfect_pop
 
 
 def run(config):

@@ -65,6 +65,7 @@ def get_degree_metric(obj_list):
 
     return mean_distrubution, std
 
+
 def get_topo_metric(obj_list):
     means = []
     stds = []
@@ -81,6 +82,7 @@ def get_topo_metric(obj_list):
     std = np.mean(stds)
     return mean, std
 
+
 def get_weights_metric(obj_list):
     all_weights = []
     for i,adj in enumerate(obj_list):
@@ -91,6 +93,7 @@ def get_weights_metric(obj_list):
     mean = np.mean(all_weights)
     std = np.std(all_weights)
     return mean, std
+
 
 if __name__ == "__main__":
 
