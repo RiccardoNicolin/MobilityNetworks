@@ -7,6 +7,7 @@
     "tracking_frequency": 2,
     "track_diversity_over": ["connectance", "variance_positive_interactions_strength"],
     "weight_range": [0,327],
+    "sparsity": 3,
     "network_size": 64,
     "num_generations": 50,
     "popsize": 100,

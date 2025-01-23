@@ -28,6 +28,7 @@ def run(config):
     mutation_odds = config["mutation_odds"]
     tournament_probability = config["tournament_probability"]
     population_file = config["population_file"]
+    sparsity_coef = config["sparsity"]
 
     with open(population_file, 'rb') as f:
         initial_population = pickle.load(f)
@@ -65,7 +66,10 @@ def run(config):
             inserted = 0
             while genomes_available > 0 and inserted < popsize:
 
-                population.append(Organism(network_size, uniform(0, np.max(initial_population[genomes_available-1])), weight_range, genome=initial_population[genomes_available-1]))
+                population.append(Organism(network_size, 
+                                            uniform(0, np.max(initial_population[genomes_available-1])**sparsity_coef),
+                                            weight_range, 
+                                            genome=initial_population[genomes_available-1]))
                 inserted += 1
                 genomes_available -= 1
 
