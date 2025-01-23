@@ -45,7 +45,7 @@ def compute_metrics(metric_names, population, dataset, run_name):
     with open(test_set_path, 'rb') as file:
         test_set = pickle.load(file)
 
-    number_of_items = len(fake_set)
+    number_of_items = min(len(fake_set), len(test_set))
     uno = random.sample(test_set, number_of_items)
     due = random.sample(fake_set, number_of_items)
     mixed_set_pairs = [pair for pair in itertools.product(uno , due)]
@@ -89,30 +89,37 @@ def get_distributions(distribution_names, population, dataset, run_name):
     with open(test_set_path, 'rb') as file:
         test_set = pickle.load(file)
 
+    mogan_set_path = f"GAN-flow/{dataset}/fake_set.txt"
+    with open(mogan_set_path, 'rb') as file:
+        mogan_set = pickle.load(file)
+
     if 'degree' in distribution_names:
         test_dist, _ = get_degree_metric(test_set)
         fake_dist, _ = get_degree_metric(fake_set)
+        mogan_dist, _ = get_degree_metric(mogan_set)
 
-        plot_distributions([test_dist, fake_dist],
-                           ['Real', 'Fake'], 
+        plot_distributions([test_dist, fake_dist,mogan_dist],
+                           ['Real', 'Fake', 'MoGAN'], 
                            'Degree Distribution', 'Degree', 'Frequency', 
                            f"{run_name}/evaluations/degree_distribution.png")
         
     if 'indegree' in distribution_names:
         test_dist, _ = get_indegree_metric(test_set)
         fake_dist, _ = get_indegree_metric(fake_set)
+        mogan_dist, _ = get_indegree_metric(mogan_set)
 
-        plot_distributions([test_dist, fake_dist],
-                           ['Real', 'Fake'], 
+        plot_distributions([test_dist, fake_dist, mogan_dist],
+                           ['Real', 'Fake', 'MoGAN'], 
                            'In-Degree Distribution', 'In-Degree', 'Frequency', 
                            f"{run_name}/evaluations/indegree_distribution.png")
         
     if 'outdegree' in distribution_names:
         test_dist, _ = get_outdegree_metric(test_set)
         fake_dist, _ = get_outdegree_metric(fake_set)
+        mogan_dist, _ = get_outdegree_metric(mogan_set)
 
-        plot_distributions([test_dist, fake_dist],
-                           ['Real', 'Fake'], 
+        plot_distributions([test_dist, fake_dist, mogan_dist],
+                           ['Real', 'Fake', 'MoGAN'], 
                            'Out-Degree Distribution', 'Out-Degree', 'Frequency', 
                            f"{run_name}/evaluations/outdegree_distribution.png")
 
@@ -152,7 +159,7 @@ if __name__ == "__main__":
     run_name = sys.argv[1]    
     
     if run_name[-1] == '/':
-        run_name.pop()
+        run_name = run_name[:-1]
     
     with open(os.path.join(run_name,'config.json'), 'rb') as file:
         config = json.load(file)
@@ -165,7 +172,7 @@ if __name__ == "__main__":
         
         metrics_name= ['indegree', 'degree', 'outdegree' ]#'topo', 'weight', 'cpc', 'cutnorm']
         distribution_names = ['degree', 'indegree', 'outdegree']
-        # compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
+        compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
 
 

@@ -17,7 +17,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
-            "args": ["config/mobility_network.json"],
+            "args": ["config/degree_only_10_age_gap.json"],
             "console": "integratedTerminal"
         },
     ]
