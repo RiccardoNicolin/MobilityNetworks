@@ -1,11 +1,11 @@
 import pickle
 import json
 import os, sys
+import numpy as np
 
 from collections import Counter
 from random import random, seed, uniform
-from numpy import mean 
-import numpy as np
+from tqdm import tqdm
 sys.path.append("graph_evolution")
 
 from graph_evolution.organism import Organism
@@ -45,7 +45,9 @@ def run(config):
     if num_generations > age_progression[-1]:
         age_progression.append(num_generations)
 
-    for gen in range(num_generations+1):
+    loop = tqdm(range(num_generations+1), desc="Generations")
+
+    for gen in loop:
         #add new age layer if it is time
         if (gen == age_progression[len(age_layers)-1]):
             parents = nsga_tournament(age_layers[-1], 2*popsize, tournament_probability)
@@ -147,11 +149,10 @@ def run(config):
 
         #evaluation
         if gen % tracking_frequency == 0:
-            print("Generation", gen)
             oldest_layer = age_layers[-1]
             for name, target in objectives.items():
                 popFitnesses = [org.getError(name, target) for org in oldest_layer]
-                fitnessLog[name].append(mean(popFitnesses))
+                fitnessLog[name].append(np.mean(popFitnesses))
             for name in track_diversity_over:
                 spread = len(Counter([org.getProperty(name) for org in oldest_layer]))
                 diversityLog[name].append(spread)
