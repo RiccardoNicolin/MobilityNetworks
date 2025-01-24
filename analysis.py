@@ -182,8 +182,21 @@ if __name__ == "__main__":
         with open(os.path.join(run_name, str(run), 'final_pop.pkl'), 'rb') as file:
             obj_list = pickle.load(file)
         
-        metrics_name= ['indegree', 'degree', 'outdegree' ]#'topo', 'weight', 'cpc', 'cutnorm']
-        distribution_names = ['degree', 'indegree', 'outdegree', 'flux']
+        metrics_name= [
+            # 'indegree',
+            # 'degree',
+            # 'outdegree'
+            'topo',
+            # 'weight',
+            'cpc', 
+            'cutnorm',
+        ]
+        distribution_names = [
+            # 'degree',
+            # 'indegree',
+            # 'outdegree',
+            # 'flux',
+        ]
         compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
 
