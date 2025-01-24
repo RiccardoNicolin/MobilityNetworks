@@ -1,0 +1,68 @@
+{
+    "data_dir": "data",
+    "name": "topo_flux",
+    "reps": 3,
+    "save_data": 1,
+    "plot_data": 1,
+    "tracking_frequency": 2,
+    "track_diversity_over": [
+        "connectance",
+        "variance_positive_interactions_strength"
+    ],
+    "weight_range": [
+        0,
+        327
+    ],
+    "sparsity": 3,
+    "network_size": 64,
+    "num_generations": 130,
+    "popsize": 100,
+    "population_file": "data/preprocessed/normalized_population_BikeCHI.pkl",
+    "age_gap": 20,
+    "mutation_rate": 0.05,
+    "mutation_odds": [
+        1,
+        2,
+        1,
+        2
+    ],
+    "crossover_odds": [
+        1,
+        2,
+        2
+    ],
+    "crossover_rate": 0.6,
+    "tournament_probability": 0.25,
+    "eval_funcs": {
+        "topology": {
+            "target": 0.014828209427602617,
+            "range": 0.012900192076739168
+        },
+        "flux_distribution": {
+            "target": [
+                8.919699860250002,
+                0.630286309440687,
+                0.24967062449714206,
+                0.1247755971746612,
+                0.07722452519595409,
+                0.04598087566575404,
+                0.025768818272312418,
+                0.01695609646129329,
+                0.010027889028824339,
+                0.023068250246693903
+            ],
+            "range": [
+                0.4930087147621147,
+                0.29624628616188237,
+                0.1682973175041431,
+                0.09768952331509301,
+                0.05901691786289592,
+                0.04566170515116101,
+                0.03263656776352058,
+                0.024799031984751637,
+                0.020031027015730077,
+                0.018044897234133567
+            ]
+        }
+    }
+}

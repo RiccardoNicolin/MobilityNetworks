@@ -99,7 +99,7 @@ def get_flux_metric(obj_list):
 
         graph = nx.DiGraph(np.array(adj))
         weights = [graph[i][j]['weight'] for i, j in graph.edges()]
-        normalised_weights = [w/sum(weights) for w in weights]
+        normalised_weights = [w/np.max(weights) for w in weights]
         
         n_bins = 10
         hist, bins = np.histogram(normalised_weights, bins=n_bins, density=True)
