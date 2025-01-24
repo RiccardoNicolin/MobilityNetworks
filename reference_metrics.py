@@ -93,6 +93,24 @@ def get_weights_metric(obj_list):
     std = np.std(all_weights)
     return mean, std
 
+def get_flux_metric(obj_list):
+    distributions = []
+    for i,adj in enumerate(obj_list):
+
+        graph = nx.DiGraph(np.array(adj))
+        weights = [graph[i][j]['weight'] for i, j in graph.edges()]
+        normalised_weights = [w/np.max(weights) for w in weights]
+        
+        n_bins = 10
+        hist, bins = np.histogram(normalised_weights, bins=n_bins, density=True)
+        
+        distributions.append(hist.tolist())
+    
+    distributions = np.array(distributions)
+    mean_distribution = np.mean(distributions, axis=0).tolist()
+    std = np.std(distributions, axis=0).tolist()
+
+    return mean_distribution, std
 
 if __name__ == "__main__":
 
@@ -110,15 +128,18 @@ if __name__ == "__main__":
     mean_distrubution, std = get_degree_metric(obj_list)
     metrics["degree"] = {"mean": mean_distrubution, "std": std}
 
+    mean_distribution, std = get_flux_metric(obj_list)
+    metrics["flux"] = {"mean": mean_distribution, "std": std}
+
     mean, std = get_topo_metric(obj_list)
     metrics["topo"] = {"mean": mean, "std": std}
 
     mean, std = get_weights_metric(obj_list)
     metrics["weights"] = {"mean": mean, "std": std}
 
-    with open('data/metrics.json', 'w') as json_file:
+    with open('data/extra_metrics.json', 'w') as json_file:
         json.dump(metrics, json_file, indent=4)
 
-    get_weights_metric(obj_list)
-    pass
+    # get_weights_metric(obj_list)
+    # pass
 

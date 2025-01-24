@@ -232,3 +232,19 @@ def max_error(true, pred):
         max error between the two samples
     """
     return np.max(np.subtract(true, pred))
+
+def flux_distribution(network) -> list[float]:
+    """
+    Compute the flux distribution for the given network.
+    :param network: the network object
+    :type network: Network
+    :return: list[float]
+    """
+    networkx_obj = network.getNetworkxObject()
+    weights = [networkx_obj[i][j]['weight'] for i, j in networkx_obj.edges()]
+    normalised_weights = [w/sum(weights) for w in weights]
+    
+    n_bins = 10
+    hist, bins = np.histogram(normalised_weights, bins=n_bins, density=True)
+    
+    return hist.tolist()
