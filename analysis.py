@@ -9,7 +9,7 @@ from graph_evolution.organism import Organism
 from random import random,uniform
 import numpy as np
 from PIL import Image
-from utils_gan_flow import get_exp_measures, plot_distributions
+from utils_gan_flow import calculate_kl_divergence, get_exp_measures, plot_distributions, plot_normalized_distributions
 import random
 import os
 
@@ -50,6 +50,11 @@ def compute_metrics(metric_names, population, dataset, run_name):
     due = random.sample(fake_set, number_of_items)
     mixed_set_pairs = [pair for pair in itertools.product(uno , due)]
     len(fake_set), len(test_set), len(mixed_set_pairs), number_of_items
+
+    if len(fake_set) > number_of_items:
+        fake_set = random.sample(fake_set, number_of_items)
+    if len(test_set) > number_of_items:
+        test_set = random.sample(test_set, number_of_items)
 
     
     os.makedirs(os.path.join(run_name, 'evaluations'), exist_ok=True)
@@ -103,6 +108,16 @@ def get_distributions(distribution_names, population, dataset, run_name):
                            'Degree Distribution', 'Degree', 'Frequency', 
                            f"{run_name}/evaluations/degree_distribution.png")
         
+        plot_normalized_distributions([test_dist, fake_dist, mogan_dist],
+                           ['Real', 'Fake', 'MoGAN'], 
+                           'Normalized Degree Distribution', 'Degree', 'Frequency', 
+                           f"{run_name}/evaluations/normalized_degree_distribution.png")
+        
+        kl_mogan = calculate_kl_divergence(test_dist, mogan_dist)
+        kl_ours = calculate_kl_divergence(test_dist, fake_dist)
+        print(f"KL divergence between real and MoGAN: {kl_mogan}")
+        print(f"KL divergence between real and ours: {kl_ours}")
+        
     if 'indegree' in distribution_names:
         test_dist, _ = get_indegree_metric(test_set)
         fake_dist, _ = get_indegree_metric(fake_set)
@@ -112,7 +127,17 @@ def get_distributions(distribution_names, population, dataset, run_name):
                            ['Real', 'Fake', 'MoGAN'], 
                            'In-Degree Distribution', 'In-Degree', 'Frequency', 
                            f"{run_name}/evaluations/indegree_distribution.png")
+        plot_normalized_distributions([test_dist, fake_dist, mogan_dist],
+                            ['Real', 'Fake', 'MoGAN'], 
+                            'Normalized In-Degree Distribution', 'In-Degree', 'Frequency', 
+                            f"{run_name}/evaluations/normalized_indegree_distribution.png")
         
+        kl_mogan = calculate_kl_divergence(test_dist, mogan_dist)
+        kl_ours = calculate_kl_divergence(test_dist, fake_dist)
+        print(f"KL divergence between real and MoGAN: {kl_mogan}")
+        print(f"KL divergence between real and ours: {kl_ours}")
+
+
     if 'outdegree' in distribution_names:
         test_dist, _ = get_outdegree_metric(test_set)
         fake_dist, _ = get_outdegree_metric(fake_set)
@@ -122,7 +147,16 @@ def get_distributions(distribution_names, population, dataset, run_name):
                            ['Real', 'Fake', 'MoGAN'], 
                            'Out-Degree Distribution', 'Out-Degree', 'Frequency', 
                            f"{run_name}/evaluations/outdegree_distribution.png")
+        plot_normalized_distributions([test_dist, fake_dist, mogan_dist],
+                            ['Real', 'Fake', 'MoGAN'], 
+                            'Normalized Out-Degree Distribution', 'Out-Degree', 'Frequency', 
+                            f"{run_name}/evaluations/normalized_outdegree_distribution.png")
 
+        kl_mogan = calculate_kl_divergence(test_dist, mogan_dist)
+        kl_ours = calculate_kl_divergence(test_dist, fake_dist)
+        print(f"KL divergence between real and MoGAN: {kl_mogan}")
+        print(f"KL divergence between real and ours: {kl_ours}")
+        
 def plot_metrics(test_metric,fake_metric,mixed_metric, mogan_metric, metric_name, dataset, run_name):
     import matplotlib.pyplot as plt
     plt.figure(figsize=(8,6))
@@ -170,7 +204,7 @@ if __name__ == "__main__":
         with open(os.path.join(run_name, str(run), 'final_pop.pkl'), 'rb') as file:
             obj_list = pickle.load(file)
         
-        metrics_name= ['indegree', 'degree', 'outdegree' ]#'topo', 'weight', 'cpc', 'cutnorm']
+        metrics_name= ['indegree', 'degree', 'outdegree' ,'topo', 'cpc', 'cutnorm'] #  'weight',
         distribution_names = ['degree', 'indegree', 'outdegree']
         compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))

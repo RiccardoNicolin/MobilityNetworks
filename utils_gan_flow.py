@@ -8,6 +8,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from cutnorm import compute_cutnorm
+from scipy.stats import entropy
+
 #import warnings
 #warnings.filterwarnings("ignore")
 
@@ -48,6 +50,68 @@ def plot_distributions(distributions: list,
 
     # Save the plot to the specified output path
     plt.savefig(output_path)
+
+def plot_normalized_distributions(distributions: list,
+                                    labels: list,
+                                    title: str,
+                                    x_label: str,
+                                    y_label: str,
+                                    output_path: str):
+        """
+        Plot the given distributions with the specified labels and title.
+        The plot is saved to the specified output path.
+    
+        :param distributions: The distributions to plot
+        :param labels: The labels for the distributions
+        :param title: The title of the plot
+        :param x_label: The label for the x-axis
+        :param y_label: The label for the y-axis
+        :param output_path: The path to save the plot
+        """
+        # Create a new figure
+        plt.figure(figsize=(10, 6))
+    
+        # Plot the distributions as histograms
+        for distribution, label in zip(distributions, labels):
+            plt.hist(distribution, bins=30, alpha=0.5, label=label, density=True)
+    
+        # Add a legend
+        plt.legend()
+    
+        # Add a title and labels
+        plt.title(title)
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+    
+        # Save the plot to the specified output path
+        plt.savefig(output_path)
+
+def calculate_kl_divergence(dist1, dist2, bins=30, epsilon=1e-10):
+    """
+    Calculate the KL divergence between two distributions.
+
+    :param dist1: First distribution (list or numpy array)
+    :param dist2: Second distribution (list or numpy array)
+    :param bins: Number of bins to use for the histograms
+    :param epsilon: Smoothing value to avoid log(0)
+    :return: KL divergence value
+    """
+    # Create histograms (normalized to represent probabilities)
+    hist1, bin_edges = np.histogram(dist1, bins=bins, density=True)
+    hist2, _ = np.histogram(dist2, bins=bin_edges, density=True)
+    
+    # Add smoothing to avoid zeros
+    hist1 = hist1 + epsilon
+    hist2 = hist2 + epsilon
+
+    # Normalize the histograms
+    hist1 /= np.sum(hist1)
+    hist2 /= np.sum(hist2)
+    
+    # Compute KL divergence
+    kl_div = entropy(hist1, hist2)
+    
+    return kl_div
 
 def get_rmse(x, y):
     return np.sqrt(np.mean(np.subtract(x,y) ** 2))
