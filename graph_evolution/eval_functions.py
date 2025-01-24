@@ -51,7 +51,21 @@ class Evaluation:
 
         return mean, std
 
-
+    def flux_distribution(self, network) -> list[float]:
+        """
+        This function evaluates the flux distribution for a given network and 
+        is invariant wrt to the time.
+        e.g. the flux distribution of Chicago at two given times should be similar.
+        """
+        networkx_obj = network.getNetworkxObject()
+        weights = [networkx_obj[i][j]['weight'] for i, j in networkx_obj.edges()]
+        normalised_weights = [w/sum(weights) for w in weights]
+        
+        n_bins = 10
+        hist, bins = np.histogram(normalised_weights, bins=n_bins, density=True)
+        
+        return hist.tolist()
+        
 
     def avg_shortest_path_length_distribution(self, network) -> list[float]:
         weight = 1/network.numNodes**2

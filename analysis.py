@@ -2,19 +2,21 @@ import itertools
 import pickle
 import sys
 import json
-sys.path.append("graph_evolution")
 import networkx as nx
-from graph_evolution.organism import Organism
-# from organism import Organism
-from random import random,uniform
 import numpy as np
-from PIL import Image
-from utils_gan_flow import get_exp_measures, plot_distributions
 import random
 import os
 
-from reference_metrics import get_degree_metric, get_indegree_metric, get_outdegree_metric
-
+sys.path.append("graph_evolution")
+from graph_evolution.organism import Organism
+from PIL import Image
+from utils_gan_flow import get_exp_measures, plot_distributions
+from reference_metrics import (
+    get_degree_metric,
+    get_indegree_metric,
+    get_outdegree_metric,
+    get_flux_metric
+)
 def array_to_greyscale_image(array: np.ndarray, output_path: str):
     """
     Convert a 2D numpy array to a greyscale image and save it to the specified path.
@@ -122,6 +124,16 @@ def get_distributions(distribution_names, population, dataset, run_name):
                            ['Real', 'Fake', 'MoGAN'], 
                            'Out-Degree Distribution', 'Out-Degree', 'Frequency', 
                            f"{run_name}/evaluations/outdegree_distribution.png")
+    if 'flux' in distribution_names:
+        test_dist, _ = get_flux_metric(test_set)
+        fake_dist, _ = get_flux_metric(fake_set)
+        mogan_dist, _ = get_flux_metric(mogan_set)
+
+        plot_distributions([test_dist, fake_dist, mogan_dist],
+                            ['Real', 'Fake', 'MoGAN'], 
+                            'Flux Distribution', 'Normalised Flux', 'Frequency', 
+                            f"{run_name}/evaluations/flux_distribution.png")
+
 
 def plot_metrics(test_metric,fake_metric,mixed_metric, mogan_metric, metric_name, dataset, run_name):
     import matplotlib.pyplot as plt
@@ -171,7 +183,7 @@ if __name__ == "__main__":
             obj_list = pickle.load(file)
         
         metrics_name= ['indegree', 'degree', 'outdegree' ]#'topo', 'weight', 'cpc', 'cutnorm']
-        distribution_names = ['degree', 'indegree', 'outdegree']
+        distribution_names = ['degree', 'indegree', 'outdegree', 'flux']
         compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
 
