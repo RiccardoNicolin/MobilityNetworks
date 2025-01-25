@@ -221,10 +221,10 @@ if __name__ == "__main__":
             # 'indegree',
             # 'degree',
             # 'outdegree'
-            'topo',
             # 'weight',
             'cpc', 
             'cutnorm',
+            'topo',
         ]
         distribution_names = [
             # 'degree',
