@@ -1,0 +1,5 @@
+networkx
+numpy==1.*
+scikit-learn
+scikit-mobility
+tqdm
