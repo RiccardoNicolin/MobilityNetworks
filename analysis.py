@@ -219,7 +219,7 @@ if __name__ == "__main__":
         
         metrics_name= [
             # 'indegree',
-            # 'degree',
+            'degree',
             # 'outdegree'
             # 'weight',
             'cpc', 
@@ -227,10 +227,10 @@ if __name__ == "__main__":
             'topo',
         ]
         distribution_names = [
-            # 'degree',
-            # 'indegree',
-            # 'outdegree',
-            # 'flux',
+            'degree',
+            'indegree',
+            'outdegree',
+            'flux',
         ]
         compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
