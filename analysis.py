@@ -218,19 +218,19 @@ if __name__ == "__main__":
             obj_list = pickle.load(file)
         
         metrics_name= [
-            # 'indegree',
-            # 'degree',
-            # 'outdegree'
-            'topo',
+            'indegree',
+            'degree',
+            'outdegree'
             # 'weight',
             'cpc', 
             'cutnorm',
+            'topo',
         ]
         distribution_names = [
-            # 'degree',
-            # 'indegree',
-            # 'outdegree',
-            # 'flux',
+            'degree',
+            'indegree',
+            'outdegree',
+            'flux',
         ]
         compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
