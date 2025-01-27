@@ -20,6 +20,8 @@ from reference_metrics import (
 from scipy.sparse.linalg import eigsh
 import glob
 from PIL import Image
+import matplotlib.pyplot as plt
+
 
 def array_to_greyscale_image(array: np.ndarray, output_path: str):
     """
@@ -294,24 +296,40 @@ def plot_results_summary(path):
     # Plot the distribution images
     plot_set_images(distribution_images, os.path.join(path, 'distribution_summary.png'))
     plot_set_images(embedding_images, os.path.join(path, 'embedding_summary.png'))
-    plot_set_images(other_images, os.path.join(path, 'other_summary.png'))
+    plot_set_images(other_images, os.path.join(path, 'other_summary.png'), images_per_row=3)
    
-def plot_set_images(images,path):
-    # Create a new image with all the images in the list
-    widths, heights = zip(*(i.size for i in images))
+def plot_set_images(images, path, images_per_row=2):
+    """
+    Plot a set of images in a grid with a maximum number of images per row.
+    
+    Args:
+        images (list): List of PIL Image objects.
+        path (str): Path to save the plotted grid as an image.
+        images_per_row (int): Maximum number of images in a single row (default: 4).
+    """
+    # Determine grid dimensions
+    num_images = len(images)
+    if num_images == 0:
+        return
+    rows = (num_images + images_per_row - 1) // images_per_row  # Ceiling division
+    cols = min(images_per_row, num_images)
 
-    total_width = sum(widths)
-    max_height = max(heights)
+    # Set up the figure
+    fig, axs = plt.subplots(rows, cols, figsize=(4 * cols, 4 * rows), dpi=300)
+    axs = axs.ravel() if num_images > 1 else [axs]  # Flatten axis array for easier indexing
 
-    new_im = Image.new('RGB', (total_width, max_height))
+    for i in range(len(axs)):
+        if i < num_images:
+            axs[i].imshow(images[i])
+            axs[i].axis('off')  # Hide axes
+        else:
+            axs[i].axis('off')  # Turn off unused subplots
 
-    x_offset = 0
-    for im in images:
-        new_im.paste(im, (x_offset,0))
-        x_offset += im.size[0]
+    # Adjust layout and save the plot
+    plt.tight_layout()
+    plt.savefig(path, dpi=300)
+    plt.close()
 
-    new_im.save(path)
-   
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python analysis.py <run_name>")
@@ -349,7 +367,7 @@ if __name__ == "__main__":
         ]
         # compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         # get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
-
+        plot_results_summary(os.path.join(run_name, str(run), 'evaluations'))
 
     # path_inital_population = "GAN-flow/BikeCHI/v_train.txt"
     # with open(path_inital_population, 'rb') as file:
