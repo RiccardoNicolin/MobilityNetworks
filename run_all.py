@@ -21,6 +21,8 @@ if __name__ == '__main__':
     directory = args.directory
     loop = tqdm(os.listdir(directory), desc="\033[91mRunning...\033[0m")
     for config in loop:
+        if not config.endswith('.json'):
+            continue
         with open(os.path.join(directory, config)) as f:
             data = json.load(f)
             outdir = os.path.join('data', data['name'])
