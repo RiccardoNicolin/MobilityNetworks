@@ -18,6 +18,7 @@
     "crossover_odds": [1,2,2],
     "crossover_rate": 0.6,
     "tournament_probability": 0.25,
+    "eps": 0.75,
     "eval_funcs": {
         "topology": {
             "target": 0.014828209427602617,
