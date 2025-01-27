@@ -1,7 +1,8 @@
 from collections import deque
 from copy import deepcopy
 from random import randint, random, sample
-from scipy.stats import norm 
+from scipy.stats import norm
+from scipy.integrate import quad
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
