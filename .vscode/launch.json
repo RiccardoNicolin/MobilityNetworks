@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/analysis.py",
-            "args": ["data/topo_flux_degree/"],
+            "args": ["data/topo_flux/"],
             "console": "integratedTerminal"
         },
         {
