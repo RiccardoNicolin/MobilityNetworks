@@ -17,6 +17,9 @@ from reference_metrics import (
     get_outdegree_metric,
     get_flux_metric
 )
+from scipy.sparse.linalg import eigsh
+from sklearn.decomposition import PCA
+
 def array_to_greyscale_image(array: np.ndarray, output_path: str):
     """
     Convert a 2D numpy array to a greyscale image and save it to the specified path.
@@ -168,6 +171,11 @@ def get_distributions(distribution_names, population, dataset, run_name):
                             ['Real', 'Fake', 'MoGAN'], 
                             'Flux Distribution', 'Normalised Flux', 'Frequency', 
                             f"{run_name}/evaluations/flux_distribution.png")
+        
+    if "embedding" in distribution_names:
+        compute_embedding_metrics(test_set, fake_set, 'Real', 'Fake', run_name)
+        compute_embedding_metrics(test_set, mogan_set, 'Real', 'MoGAN', run_name)
+        compute_embedding_metrics(fake_set, mogan_set, 'Fake', 'MoGAN', run_name)
 
 
 def plot_metrics(test_metric,fake_metric,mixed_metric, mogan_metric, metric_name, dataset, run_name):
@@ -198,6 +206,46 @@ def get_all_npy_files(path):
                 npy_files.append(os.path.join(root, file))
     return npy_files
 
+def compute_embedding(adjs):
+    embedding_set = []
+    for adj in adjs:
+        A = np.array(adj)
+        # Compute degree matrix (weighted degrees)
+        D = np.diag(A.sum(axis=1))
+
+        # Weighted unnormalized Laplacian
+        L = D - A
+
+        # Number of dimensions for the embedding
+        k = 2
+
+        # Compute the smallest k eigenvectors of the Laplacian
+        eigenvalues, eigenvectors = eigsh(L, k=k, which='SM')  # 'SM' for smallest magnitude
+        embedding = eigenvectors
+        embedding_set.append(embedding)
+    return embedding_set
+
+def compute_embedding_metrics(set1, set2, name_set1, name_set2, run_name):
+    embedding_set1 = compute_embedding(set1)
+    embedding_set2 = compute_embedding(set2)
+    
+    import matplotlib.pyplot as plt
+
+    # Compute the mean of the embeddings for each set
+    mean_embedding_set1 = np.mean(embedding_set1, axis=0)
+    mean_embedding_set2 = np.mean(embedding_set2, axis=0)
+
+    # Plot the embeddings
+    plt.figure(figsize=(8, 6))
+    plt.scatter(mean_embedding_set1[:, 0], mean_embedding_set1[:, 1], label=name_set1, alpha=0.5)
+    plt.scatter(mean_embedding_set2[:, 0], mean_embedding_set2[:, 1], label=name_set2, alpha=0.5)
+    plt.title('2D Embeddings')
+    plt.xlabel('Embedding Dimension 1')
+    plt.ylabel('Embedding Dimension 2')
+    plt.legend()
+    plt.savefig(f"{run_name}/evaluations/{name_set1}_vs_{name_set2}_embedding.png")
+
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -227,12 +275,13 @@ if __name__ == "__main__":
             'topo',
         ]
         distribution_names = [
-            'degree',
-            'indegree',
-            'outdegree',
-            'flux',
+            # 'degree',
+            # 'indegree',
+            # 'outdegree',
+            # 'flux',
+            'embedding'
         ]
-        compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
+        # compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
 
 
