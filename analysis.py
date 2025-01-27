@@ -218,13 +218,13 @@ if __name__ == "__main__":
             obj_list = pickle.load(file)
         
         metrics_name= [
-            # 'indegree',
+            'indegree',
             'degree',
-            # 'outdegree'
+            'outdegree',
             # 'weight',
-            'cpc', 
-            'cutnorm',
-            'topo',
+            # 'cpc', 
+            # 'cutnorm',
+            # 'topo',
         ]
         distribution_names = [
             'degree',

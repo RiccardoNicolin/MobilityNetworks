@@ -234,8 +234,6 @@ def get_exp_measures(lista, paired = False, method = "cutnorm"):
                 exp.append(cutn_sdp)
                 k+=1
         return exp
-
-
     else:
         raise ValueError("Invalid method '{}'".format(method))
 
