@@ -353,20 +353,20 @@ if __name__ == "__main__":
             'degree',
             'outdegree',
             # 'weight',
-            # 'cpc', 
-            # 'cutnorm',
-            # 'topo',
+            'cpc', 
+            'cutnorm',
+            'topo',
         ]
         distribution_names = [
-            # 'degree',
-            # 'indegree',
-            # 'outdegree',
-            # 'flux',
-            # 'embedding',
-            'initial_vs_sparse'
+            'degree',
+            'indegree',
+            'outdegree',
+            'flux',
+            'embedding',
+            # 'initial_vs_sparse'
         ]
-        # compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
-        # get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
+        compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
+        get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
         plot_results_summary(os.path.join(run_name, str(run), 'evaluations'))
 
     # path_inital_population = "GAN-flow/BikeCHI/v_train.txt"
