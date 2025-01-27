@@ -69,7 +69,7 @@ def run(config):
             while genomes_available > 0 and inserted < popsize:
 
                 population.append(Organism(network_size, 
-                                            uniform(0, np.max(initial_population[genomes_available-1])**sparsity_coef),
+                                            uniform(0, np.mean(initial_population[genomes_available-1])**sparsity_coef),
                                             weight_range, 
                                             genome=initial_population[genomes_available-1]))
                 inserted += 1

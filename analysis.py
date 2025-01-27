@@ -18,7 +18,8 @@ from reference_metrics import (
     get_flux_metric
 )
 from scipy.sparse.linalg import eigsh
-from sklearn.decomposition import PCA
+import glob
+from PIL import Image
 
 def array_to_greyscale_image(array: np.ndarray, output_path: str):
     """
@@ -178,6 +179,7 @@ def get_distributions(distribution_names, population, dataset, run_name):
         compute_embedding_metrics(fake_set, mogan_set, 'Fake', 'MoGAN', run_name)
 
 
+
 def plot_metrics(test_metric,fake_metric,mixed_metric, mogan_metric, metric_name, dataset, run_name):
     import matplotlib.pyplot as plt
     plt.figure(figsize=(8,6))
@@ -220,10 +222,29 @@ def compute_embedding(adjs):
         k = 2
 
         # Compute the smallest k eigenvectors of the Laplacian
-        eigenvalues, eigenvectors = eigsh(L, k=k, which='SM')  # 'SM' for smallest magnitude
-        embedding = eigenvectors
-        embedding_set.append(embedding)
+        try:
+            eigenvalues, eigenvectors = eigsh(L, k=k, which='SM', maxiter=1000, tol=0)  # 'SM' for smallest magnitude
+            embedding = eigenvectors
+            embedding_set.append(embedding)
+        except Exception as e:
+            print(f"Error computing embedding: {e}")
     return embedding_set
+
+def compute_inital_pop_vs_sparse_pop(population):
+
+    random.seed(None)
+
+    sparse_set = []
+    for individual in population:
+
+        genome = individual / 327.0
+        sparse_set.append(Organism(64, 
+                                    random.uniform(0, np.mean(genome)**5),
+                                    [0,327], 
+                                    genome=genome).adjacencyMatrix)
+    
+    compute_embedding_metrics(population, sparse_set, 'Initial Population', 'Sparse Set', 'data/topo_flux_degree/0')
+
 
 def compute_embedding_metrics(set1, set2, name_set1, name_set2, run_name):
     embedding_set1 = compute_embedding(set1)
@@ -235,18 +256,62 @@ def compute_embedding_metrics(set1, set2, name_set1, name_set2, run_name):
     mean_embedding_set1 = np.mean(embedding_set1, axis=0)
     mean_embedding_set2 = np.mean(embedding_set2, axis=0)
 
+    centroid_set1 = np.mean(mean_embedding_set1, axis=0)
+    centroid_set2 = np.mean(mean_embedding_set2, axis=0)
+
+    print(f"Centroid of {name_set1}: {centroid_set1}")
+    print(f"Centroid of {name_set2}: {centroid_set2}")
+
     # Plot the embeddings
     plt.figure(figsize=(8, 6))
     plt.scatter(mean_embedding_set1[:, 0], mean_embedding_set1[:, 1], label=name_set1, alpha=0.5)
     plt.scatter(mean_embedding_set2[:, 0], mean_embedding_set2[:, 1], label=name_set2, alpha=0.5)
+    plt.scatter(centroid_set1[0], centroid_set1[1], label=f'Centroid {name_set1}', color='blue', marker='x', s=100)
+    plt.scatter(centroid_set2[0], centroid_set2[1], label=f'Centroid {name_set2}', color='red', marker='x', s=100)
     plt.title('2D Embeddings')
     plt.xlabel('Embedding Dimension 1')
     plt.ylabel('Embedding Dimension 2')
     plt.legend()
     plt.savefig(f"{run_name}/evaluations/{name_set1}_vs_{name_set2}_embedding.png")
 
+def plot_results_summary(path):
+    # Read all images in the specified path
+    image_files = glob.glob(os.path.join(path, "*.png"))
+    images = [Image.open(image_file) for image_file in image_files]
 
+    distribution_images = []
+    embedding_images = []
+    other_images = []
 
+    for img in images:
+        if 'distribution' in os.path.basename(img.filename):
+            distribution_images.append(img)
+        elif 'embedding' in os.path.basename(img.filename):
+            embedding_images.append(img)
+        else:
+            other_images.append(img)
+
+    # Plot the distribution images
+    plot_set_images(distribution_images, os.path.join(path, 'distribution_summary.png'))
+    plot_set_images(embedding_images, os.path.join(path, 'embedding_summary.png'))
+    plot_set_images(other_images, os.path.join(path, 'other_summary.png'))
+   
+def plot_set_images(images,path):
+    # Create a new image with all the images in the list
+    widths, heights = zip(*(i.size for i in images))
+
+    total_width = sum(widths)
+    max_height = max(heights)
+
+    new_im = Image.new('RGB', (total_width, max_height))
+
+    x_offset = 0
+    for im in images:
+        new_im.paste(im, (x_offset,0))
+        x_offset += im.size[0]
+
+    new_im.save(path)
+   
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python analysis.py <run_name>")
@@ -279,10 +344,17 @@ if __name__ == "__main__":
             # 'indegree',
             # 'outdegree',
             # 'flux',
-            'embedding'
+            # 'embedding',
+            'initial_vs_sparse'
         ]
         # compute_metrics(metrics_name, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
-        get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
+        # get_distributions(distribution_names, obj_list, 'BikeCHI', os.path.join(run_name, str(run)))
+
+
+    # path_inital_population = "GAN-flow/BikeCHI/v_train.txt"
+    # with open(path_inital_population, 'rb') as file:
+    #     initial_population = pickle.load(file)
+    # compute_inital_pop_vs_sparse_pop(initial_population)
 
 
     # for i,organism in enumerate(obj_list[:5]):

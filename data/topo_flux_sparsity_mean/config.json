@@ -5,17 +5,32 @@
     "save_data": 1,
     "plot_data": 1,
     "tracking_frequency": 2,
-    "track_diversity_over": ["connectance", "variance_positive_interactions_strength"],
-    "weight_range": [0,327],
+    "track_diversity_over": [
+        "connectance",
+        "variance_positive_interactions_strength"
+    ],
+    "weight_range": [
+        0,
+        327
+    ],
     "sparsity": 5,
     "network_size": 64,
     "num_generations": 130,
     "popsize": 100,
-    "population_file" : "data/preprocessed/normalized_population_BikeCHI.pkl",
+    "population_file": "data/preprocessed/normalized_population_BikeCHI.pkl",
     "age_gap": 20,
     "mutation_rate": 0.05,
-    "mutation_odds": [1,2,1,2],
-    "crossover_odds": [1,2,2],
+    "mutation_odds": [
+        1,
+        2,
+        1,
+        2
+    ],
+    "crossover_odds": [
+        1,
+        2,
+        2
+    ],
     "crossover_rate": 0.6,
     "tournament_probability": 0.25,
     "eval_funcs": {

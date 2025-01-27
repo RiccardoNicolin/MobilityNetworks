@@ -1,7 +1,7 @@
 from collections import deque
 from copy import deepcopy
 from random import randint, random, sample
-
+from scipy.stats import norm, quad
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -279,18 +279,40 @@ class Organism:
         if num_invalid/len(dist) > eps:
             self.valid = False
             
-    def check_constraint(self, mean, target_mean, std, target_std, eps = 0.5):
 
-        left_target = target_mean - target_std
-        right_target = target_mean + target_std
-        left = mean - std
-        right = mean + std
+    def intersecting_area(self, mu1, sigma1, mu2, sigma2):
+        """
+        Calculate the intersecting area of two normal distributions.
+        
+        Parameters:
+        - mu1: Mean of the first normal distribution
+        - sigma1: Standard deviation of the first normal distribution
+        - mu2: Mean of the second normal distribution
+        - sigma2: Standard deviation of the second normal distribution
+        
+        Returns:
+        - area: The intersecting area of the two distributions
+        """
+        # Define the PDFs of the two normal distributions
+        pdf1 = lambda x: norm.pdf(x, mu1, sigma1)
+        pdf2 = lambda x: norm.pdf(x, mu2, sigma2)
+        
+        # Define the minimum of the two PDFs
+        min_pdf = lambda x: np.minimum(pdf1(x), pdf2(x))
+        
+        # Integrate the minimum PDF over the entire range
+        # Choose a wide enough range to include most of the distributions' mass
+        x_min = min(mu1 - 5 * sigma1, mu2 - 5 * sigma2)
+        x_max = max(mu1 + 5 * sigma1, mu2 + 5 * sigma2)
+        
+        area, _ = quad(min_pdf, x_min, x_max)
+        return area
 
-        if right < left_target or left > right_target:
+    def check_constraint(self, mean, target_mean, std, target_std, eps = 0.75):
+        
+        intersection = self.intersecting_area(mean, std, target_mean, target_std)
+        
+        iou = intersection / (2 - intersection) # intersection over union
+       
+        if iou < eps:
             self.valid = False
-        else:
-            overlap_left = max(left, left_target)
-            overlap_right = min(right, right_target)
-            overlap_interval = overlap_right - overlap_left
-            if overlap_interval/(2*std) < eps:
-                self.valid = False
