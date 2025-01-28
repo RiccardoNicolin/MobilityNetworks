@@ -1,6 +1,6 @@
 {
     "data_dir": "data",
-    "name": "topo_flux_sparsity_mean",
+    "name": "topo_flux",
     "reps": 1,
     "save_data": 1,
     "plot_data": 1,

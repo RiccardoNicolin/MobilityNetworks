@@ -29,12 +29,12 @@ if __name__ == '__main__':
         loop.set_description(f"\033[91mRunning {config}\033[0m")
         print(" ")
         try:
-            subprocess.call([
-                'python', 'main.py', os.path.join(directory, config),
-            ])
+            # subprocess.call([
+            #     'python', 'main.py', os.path.join(directory, config),
+            # ])
             print(" ")
             subprocess.call([
-                'python', 'analyse.py', outdir,
+                'python', 'analysis.py', outdir,
             ])
         except:
             continue

@@ -1,7 +1,7 @@
 {
     "data_dir": "data",
     "name": "topo_flux",
-    "reps": 3,
+    "reps": 1,
     "save_data": 1,
     "plot_data": 1,
     "tracking_frequency": 2,
@@ -13,7 +13,7 @@
         0,
         327
     ],
-    "sparsity": 3,
+    "sparsity": 5,
     "network_size": 64,
     "num_generations": 130,
     "popsize": 100,
@@ -33,6 +33,7 @@
     ],
     "crossover_rate": 0.6,
     "tournament_probability": 0.25,
+    "eps": 0.75,
     "eval_funcs": {
         "topology": {
             "target": 0.014828209427602617,
