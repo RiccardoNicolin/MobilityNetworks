@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pickle
+import sys
 
 def load_npy_files_from_directory(directory_path):
     npy_files = []
@@ -29,9 +30,14 @@ def normalize_population(population):
 
 if __name__ == "__main__":
     # preprocessing for the data
-    path = 'GAN-flow/adj/BikeCHI'
+    if sys.argv != 2:
+        print("Usage: python data_loader.py <dataset_name>")
+        sys.exit(1)
+    else:
+        dataset = sys.argv[1]
+        assert dataset in ['BikeCHI', 'BikeNYC', 'TaxiNYC', 'TaxiCHI'], "Invalid dataset name"
+    path = f'GAN-flow/adj/{dataset}'
     population = load_npy_files_from_directory(path)
     normalized_population = normalize_population(population)
-    name = path.split('/')[-1]
-    with open(f'preprocessed/normalized_population_{name}.pkl', 'wb') as f:
+    with open(f'preprocessed/normalized_population_{dataset}.pkl', 'wb') as f:
         pickle.dump(normalized_population, f)

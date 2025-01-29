@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import itertools
 from scipy.spatial import distance
 # from cutnorm import compute_cutnorm
