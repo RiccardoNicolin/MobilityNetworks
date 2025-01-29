@@ -123,8 +123,8 @@ def get_distributions(distribution_names, population, dataset, run_name):
         
         kl_mogan = calculate_kl_divergence(test_dist, mogan_dist)
         kl_ours = calculate_kl_divergence(test_dist, fake_dist)
-        print(f"KL divergence between real and MoGAN: {kl_mogan}")
-        print(f"KL divergence between real and ours: {kl_ours}")
+        print(f"KL divergence [degree] between real and MoGAN: {kl_mogan}")
+        print(f"KL divergence [degree] between real and ours: {kl_ours}")
         
     if 'indegree' in distribution_names:
         test_dist, _ = get_indegree_metric(test_set)
@@ -142,8 +142,8 @@ def get_distributions(distribution_names, population, dataset, run_name):
         
         kl_mogan = calculate_kl_divergence(test_dist, mogan_dist)
         kl_ours = calculate_kl_divergence(test_dist, fake_dist)
-        print(f"KL divergence between real and MoGAN: {kl_mogan}")
-        print(f"KL divergence between real and ours: {kl_ours}")
+        print(f"KL divergence [indegree] between real and MoGAN: {kl_mogan}")
+        print(f"KL divergence [indegree] between real and ours: {kl_ours}")
 
 
     if 'outdegree' in distribution_names:
@@ -162,8 +162,8 @@ def get_distributions(distribution_names, population, dataset, run_name):
 
         kl_mogan = calculate_kl_divergence(test_dist, mogan_dist)
         kl_ours = calculate_kl_divergence(test_dist, fake_dist)
-        print(f"KL divergence between real and MoGAN: {kl_mogan}")
-        print(f"KL divergence between real and ours: {kl_ours}")
+        print(f"KL divergence [outdegree] between real and MoGAN: {kl_mogan}")
+        print(f"KL divergence [outdegree] between real and ours: {kl_ours}")
         
     if 'flux' in distribution_names:
         test_dist, _ = get_flux_metric(test_set)
@@ -174,6 +174,11 @@ def get_distributions(distribution_names, population, dataset, run_name):
                             ['Real', 'Fake', 'MoGAN'], 
                             'Flux Distribution', 'Normalised Flux', 'Frequency', 
                             f"{run_name}/evaluations/flux_distribution.png")
+        
+        kl_mogan = calculate_kl_divergence(test_dist, mogan_dist)
+        kl_ours = calculate_kl_divergence(test_dist, fake_dist)
+        print(f"KL divergence [flux] between real and MoGAN: {kl_mogan}")
+        print(f"KL divergence [flux] between real and ours: {kl_ours}")
         
     if "embedding" in distribution_names:
         compute_embedding_metrics(test_set, fake_set, 'Real', 'Fake', run_name)

@@ -1,6 +1,6 @@
 {
     "data_dir": "data",
-    "name": "deg_flux",
+    "name": "deg_flux-50bins",
     "reps": 1,
     "save_data": 1,
     "plot_data": 1,
@@ -284,7 +284,7 @@
                 0.0
             ]
         },
-        "flux": {
+        "flux_distribution": {
         "target": [
             32.635014067250715,
             5.851029168077047,

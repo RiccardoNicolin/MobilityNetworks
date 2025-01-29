@@ -101,7 +101,7 @@ def get_flux_metric(obj_list):
         weights = [graph[i][j]['weight'] for i, j in graph.edges()]
         normalised_weights = [w/np.max(weights) for w in weights]
         
-        n_bins = 10
+        n_bins = 50
         hist, bins = np.histogram(normalised_weights, bins=n_bins, density=True)
         
         distributions.append(hist.tolist())

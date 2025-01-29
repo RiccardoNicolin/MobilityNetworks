@@ -1,6 +1,6 @@
 {
     "data_dir": "data",
-    "name": "topo_flux",
+    "name": "topo_flux-50bins",
     "reps": 1,
     "save_data": 1,
     "plot_data": 1,
@@ -24,7 +24,7 @@
             "target": 0.014828209427602617,
             "range": 0.012900192076739168
         },
-        "flux": {
+        "flux_distribution": {
         "target": [
             32.635014067250715,
             5.851029168077047,

@@ -36,17 +36,31 @@ def plot_distributions(distributions: list,
     # Create a new figure
     plt.figure(figsize=(10, 6))
 
+    bins = 50 if 'flux' in title.lower() else 30
+    
     # Plot the distributions as histograms
+    
+    shift = np.repeat(-0.25, bins)
     for distribution, label in zip(distributions, labels):
-        plt.hist(distribution, bins=30, alpha=0.5, label=label, density=True)
+        if 'flux' in title.lower():
+            x = np.arange(len(distribution))
+            plt.bar(x + shift, distribution, width=0.25, alpha=0.5, align='center', label=label)
+            plt.yscale('log')
+            shift += np.repeat(0.25, len(distribution))
+        else:
+            distr, bins = np.histogram(distribution, bins=bins, density=True)
+            x = np.arange(len(distr))
+            plt.bar(x + shift, distr, width=0.25, alpha=0.5, align='center', label=label)
+            plt.yscale('log')
+            shift += np.repeat(0.25, len(distr))
 
     # Add a legend
     plt.legend()
 
     # Add a title and labels
     plt.title(title)
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+    plt.xlabel(x_label + ' bins')
+    plt.ylabel(y_label + ' (log scale)')
 
     # Save the plot to the specified output path
     plt.savefig(output_path)
