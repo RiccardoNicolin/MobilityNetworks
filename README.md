@@ -32,7 +32,7 @@ For further information about the datasets, please refer to the [MoGAN repositor
 ## Usage
 Firstly, you need to make sure that the dataset you want to use has a corresponding .pkl file in the `data/preprocessed` folder. If it does not exist, you can create it by running the following command:
 ```bash
-python data_loader.py <dataset_name>
+python data/data_loader.py <dataset_name>
 ```
 where `<dataset_name>` is the name of the dataset you want to use.
 

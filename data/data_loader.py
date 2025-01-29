@@ -30,7 +30,7 @@ def normalize_population(population):
 
 if __name__ == "__main__":
     # preprocessing for the data
-    if sys.argv != 2:
+    if len(sys.argv) != 2:
         print("Usage: python data_loader.py <dataset_name>")
         sys.exit(1)
     else:
@@ -39,5 +39,5 @@ if __name__ == "__main__":
     path = f'GAN-flow/adj/{dataset}'
     population = load_npy_files_from_directory(path)
     normalized_population = normalize_population(population)
-    with open(f'preprocessed/normalized_population_{dataset}.pkl', 'wb') as f:
+    with open(f'data/preprocessed/normalized_population_{dataset}.pkl', 'wb') as f:
         pickle.dump(normalized_population, f)
