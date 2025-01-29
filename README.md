@@ -2,4 +2,6 @@
 Project for the course of Bio-Insipired AI 2024/25 UniTN
 
 # Authors
-<!-- - [Mattia Rigon]() -->
+- [Amir Gheser]()
+- [Mattia Rigon]()
+- [Matteo Mascherin]()
