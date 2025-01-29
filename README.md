@@ -1,5 +1,11 @@
 # Genetic algorithms for generation of new mobility networks
 This project aims to generate new mobility networks using a *Bio-Inspired* approach. [NSGA II](https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=996017) is employed as the main evolutionary algorithm to evolve the networks.
+<table>
+    <tr>
+        <td><img src='images/network-example.png' width='500'></td>
+        <td><img src='images/pareto_degree_distribution_flux_distribution.png' width='500'></td>
+    </tr>
+</table>
 
 This project is built on top of two works:
 - [Evolving Weighted and Directed Graphs with Constrained
