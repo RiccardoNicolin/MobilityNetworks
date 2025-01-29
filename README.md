@@ -49,6 +49,13 @@ python analysis.py <path_to_experiment>
 ```
 where `<path_to_experiment>` is the path to the folder containing the results of the evolution (it is defined in the configuration file).
 
+### Running multiple experiments
+If you want to run multiple experiments, you can use the `run_all.py` script. You can define the experiments passing a folder containing the configs for the different experiments. For example:
+```bash
+python run_all.py config/
+```
+where the `config` folder contains the configuration files for the different experiments.
+
 ### Custom optimization
 If you want to run an optimization of different metrics or with different constraints, you can create a new property and define it in the `graph_evolution/eval_functions.py` file. Then you can follow the implementation in the `reference_metrics.py` file in order to get the target values for the new property. Finally, you can define the new property in the configuration file and run the optimization.
 
