@@ -173,3 +173,19 @@ distributions = {funcName:getattr(Evaluation, funcName) for funcName in dir(Eval
 if __name__ == "__main__":
     e = Evaluation()
     print(e.functions)
+
+
+
+#ADDED BY NICOLIN RICCARDO
+
+    def CPC_evaluation(self, network) -> tuple[float, float]:
+        """
+        This function evaluates the CPC (Common part of commuter), also known as Sørensen-Dice index,
+        that range between 0 and 1 (1 being a perfect match between a generated network and the ground truth - in our case a random matrix in the original dataset).
+        It is calculate from a 
+        """
+        networkx_obj = network.getNetworkxObject()
+        cpc = 0
+
+
+        return cpc, cmc
